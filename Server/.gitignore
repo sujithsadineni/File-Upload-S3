@@ -1,0 +1,48 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# dotenv environment variables
+.env
+.env.local
+.env.*.local
+
+# OS and editor junk
+.DS_Store
+Thumbs.db
+
+# VSCode settings
+.vscode/
+.idea/
+
+# npm cache
+.npm/
+
+# Coverage from testing tools like Jest
+coverage/
+
+# Output folders
+dist/
+build/
+
+# Debug
+debug.log
+
+# Sequelize CLI config cache
+.sequelize*
+
+# Temporary files
+*.swp
+*.swo
