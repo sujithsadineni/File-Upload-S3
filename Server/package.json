@@ -15,12 +15,15 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.12.0",
+    "@graphql-tools/schema": "^10.0.23",
     "aws-sdk": "^2.1692.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "graphql": "^16.10.0",
     "graphql-tools": "^9.0.18",
+    "graphql-upload": "^16.0.2",
     "knex": "^3.1.0",
+    "multer": "^1.4.5-lts.2",
     "nodemon": "^3.1.9",
     "pg": "^8.14.1",
     "uuid": "^11.1.0"
