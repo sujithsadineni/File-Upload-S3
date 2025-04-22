@@ -56,9 +56,11 @@ function FileUpload({ onUploadSuccess }) {
         </Button>
       </Upload>
 
-      <Paragraph className="file-link">
-        ✅ {fileName} uploaded successfully!
-      </Paragraph>
+      {fileName && (
+        <Paragraph className="file-link">
+          ✅ {fileName} uploaded successfully!
+        </Paragraph>
+      )}
     </div>
   );
 }
