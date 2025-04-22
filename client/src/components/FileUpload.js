@@ -5,9 +5,9 @@ import "./FileUpload.css";
 
 const { Paragraph } = Typography;
 
-function FileUpload() {
+function FileUpload({ onUploadSuccess }) {
   const [uploading, setUploading] = useState(false);
-  const [fileUrl, setFileUrl] = useState(null);
+  const [fileName, setFileName] = useState(null);
 
   const handleUpload = async (file, onSuccess, onError) => {
     const formData = new FormData();
@@ -23,13 +23,13 @@ function FileUpload() {
 
       if (!res.ok) throw new Error(data.error || "Upload failed");
 
-      message.success("✅ File uploaded successfully!");
-      setFileUrl(data.s3_url);
-
-      onSuccess("ok"); // tell AntD it's done
+      message.success("File uploaded successfully!");
+      setFileName(data.filename);
+      if (onUploadSuccess) onUploadSuccess(); // ✅ notify parent
+      onSuccess("ok");
     } catch (err) {
       console.error("Upload error:", err);
-      message.error("❌ Upload failed.");
+      message.error("Upload failed.");
       onError(err);
     } finally {
       setUploading(false);
@@ -56,14 +56,9 @@ function FileUpload() {
         </Button>
       </Upload>
 
-      {fileUrl && (
-        <Paragraph copyable className="file-link">
-          ✅ File uploaded:{" "}
-          <a href={fileUrl} target="_blank" rel="noreferrer">
-            {fileUrl}
-          </a>
-        </Paragraph>
-      )}
+      <Paragraph className="file-link">
+        ✅ {fileName} uploaded successfully!
+      </Paragraph>
     </div>
   );
 }

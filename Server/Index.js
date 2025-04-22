@@ -58,6 +58,56 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
+// get all files
+app.get("/files", async (req, res) => {
+  try {
+    const files = await db("uploaded_files").select("*");
+    res.json(files);
+  } catch (error) {
+    console.error("Failed to fetch files:", error);
+    res.status(500).json({ error: "Failed to fetch files" });
+  }
+});
+
+// 🆕 REST endpoint to delete a file by ID
+app.delete("/files/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Fetch the file record from the database
+    const fileRecord = await db("uploaded_files").where({ id }).first();
+    if (!fileRecord) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    // Delete the file from S3
+    const deleteParams = {
+      Bucket: process.env.S3_BUCKET,
+      Key: fileRecord.s3_key,
+    };
+    await s3.deleteObject(deleteParams).promise();
+
+    try {
+      // Delete the record from the database
+      await db("uploaded_files").where({ id }).del();
+      res.json({ message: "File deleted successfully" });
+    } catch (dbError) {
+      // Rollback: Re-upload the file to S3 if DB deletion fails
+      const rollbackParams = {
+        Bucket: process.env.S3_BUCKET,
+        Key: fileRecord.s3_key,
+        Body: fileRecord.buffer, // Ensure you have the file buffer stored
+      };
+      await s3.upload(rollbackParams).promise();
+      throw dbError;
+    }
+  } catch (error) {
+    console.error("Failed to delete file:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to delete file", details: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 REST server running at http://localhost:${PORT}`);
 });
