@@ -65,7 +65,12 @@ function GetAllFiles({ refreshTrigger }) {
       key: "actions",
       render: (_, record) => (
         <div style={{ display: "flex", gap: "8px" }}>
-          <a href={record.url} download target="" rel="noopener noreferrer">
+          <a
+            href={record.url}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button type="default" icon={<CloudDownloadOutlined />}>
               Download
             </Button>
